@@ -116,7 +116,11 @@ def ask_gemini(user_query):
     payload = {
         "contents": [{"role": "user", "parts": [{"text": user_query}]}],
         "systemInstruction": {"parts": [{"text": system_prompt}]},
-        "generationConfig": {"temperature": 0.3, "maxOutputTokens": 400}
+        "generationConfig": {
+            "temperature": 0.3,
+            "maxOutputTokens": 1500,
+            "thinkingConfig": {"thinkingBudget": 0}
+        }
     }
     req = urllib.request.Request(
         url,

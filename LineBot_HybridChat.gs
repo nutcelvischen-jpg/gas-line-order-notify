@@ -261,7 +261,11 @@ ${knowledge}`;
     const payload = {
       contents: [{ role: "user", parts: [{ text: userQuestion }] }],
       systemInstruction: { parts: [{ text: systemPrompt }] },
-      generationConfig: { temperature: 0.3, maxOutputTokens: 600 }
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 1500,
+        thinkingConfig: { thinkingBudget: 0 }
+      }
     };
 
     const res = UrlFetchApp.fetch(url, {
