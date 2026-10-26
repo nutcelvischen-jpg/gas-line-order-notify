@@ -74,6 +74,80 @@ flowchart TD
 
 ---
 
+#### 🏛️ 小白通識第二彈：什麼是「前端」與「後端」？為什麼 API Key 一定要藏在後端？
+
+很多初學者常聽到工程師聊「前端、後端、API Key」，聽得一頭霧水。其實只要用**「餐廳外場與內場廚房」**來想，就完全通了！
+
+##### 1. 餐廳架構圖（前端 vs 後端）
+
+```mermaid
+flowchart TD
+    subgraph Frontend ["🍽️ 前端 (Frontend) —— 餐廳外場（客人看得到的地方）"]
+        LineApp["📱 客人的手機 LINE 畫面<br>(對話框 / 鍵盤)"]
+        RichMenu["🖼️ 底部圖文選單<br>(按鈕、菜單)"]
+        QuickReply["💊 快捷膠囊按鈕<br>(點一下即發送)"]
+    end
+
+    subgraph Internet ["🌐 網路傳輸 (外送專線)"]
+        WebhookPost["LINE Webhook (doPost 倒貨)"]
+        LineReply["LINE Reply (把菜端回客人桌上)"]
+    end
+
+    subgraph Backend ["🍳 後端 (Backend) —— 內場廚房（客人嚴禁進入的後台）"]
+        GAS["🧠 Google Apps Script<br>(總主廚：判斷客人要幹嘛)"]
+        SheetDB[("📊 Google 試算表<br>(乾貨庫房：查訂單與庫存)")]
+        GeminiAI["⚡ Gemini 3.8 Flash<br>(AI 顧問：幫忙想專業台詞)"]
+        Vault["🔐 雲端保險箱 (Script Properties)<br>【專門藏 API Key 與密碼的地方】"]
+    end
+
+    LineApp -->|"客人點餐下單"| WebhookPost
+    RichMenu -.-> LineApp
+    QuickReply -.-> LineApp
+    WebhookPost --> GAS
+    
+    GAS <-->|"拿鑰匙開鎖"| Vault
+    GAS <-->|"查進度"| SheetDB
+    GAS <-->|"請教問題"| GeminiAI
+    GAS -->|"做好的菜送出"| LineReply
+    LineReply --> LineApp
+```
+
+##### 2. 前端與後端的分工
+| 角色 | 現實比喻 | 在我們的 LINE Bot 系統裡是誰？ | 核心職責 |
+| :--- | :--- | :--- | :--- |
+| **前端 (Frontend)** | **餐廳外場與餐桌** | 客人手機上的 **LINE 聊天畫面**、**圖文選單**、**膠囊按鈕** | 負責「**長得好看**」與「**接收客人的點擊與輸入**」，把客人的需求傳遞給後台。 |
+| **後端 (Backend)** | **內場廚房與金庫** | **Google Apps Script** + **Google 試算表資料庫** | 負責「**大腦運算**」，判斷客人的問題、查試算表、問 Gemini，並把做好的回答送回外場。 |
+
+---
+
+##### 3. 駭客危機：為什麼 API Key 絕對不能放在前端？怎麼藏？
+
+> 🔑 **API Key 是什麼？**  
+> 它就像你個人的**「信用卡」**或**「保險庫大門鑰匙」**。任何拿到這把 Key 的人，都可以拿去狂打 AI 模型，產生的費用全由你買單！
+
+* **危險做法（放在前端）**：
+  * 如果把 API Key 寫在網頁或前端 APP 上，任何只要懂按滑鼠右鍵「檢查原始碼」的壞人，**就能 1 秒抄走你的 Key 去盜刷**，直到你的錢包見底！
+* **安全做法（藏在後端保險箱）**：
+  * **金鑰永遠只能放在後端廚房（GAS 內部）**，客人永遠只能看到菜（文字回覆），永遠摸不到後台的廚具與金鑰。
+
+##### 4. 在 Google Apps Script 裡，我們怎麼「藏」Key？
+我們不要把金鑰直接寫在 code 的文字裡，而是使用 Google 內建的秘密夾層：  
+👉 **【指令碼屬性 (Script Properties)】**！
+
+```
+【程式碼 (Code.gs)】
+  只有一句指令：「去後台保險箱把 GEMINI_API_KEY 拿出來用！」
+                     │
+                     ▼ (安全讀取)
+【Google 雲端保險箱 (Script Properties)】
+  裡面鎖著真正的私密金鑰：AQ.Ab8RN6KugM8HEJKu04...
+```
+
+* **成果**：  
+  就算你在投影幕前把整份程式碼展示給所有學生看，學生也只會看到 `SCRIPT_PROPS.getProperty(...)` 這行指令，**你的真實金鑰完完全全被鎖在 Google 安全保險箱內，100% 不會外洩！**
+
+---
+
 #### 💡 小白觀念大補帖：什麼是 doGet 和 doPost？那個 (e) 到底是什麼？
 
 很多初學者第一次看到 `doPost(e)` 都會好奇：「為什麼一定要叫這個名字？不能叫 `main` 嗎？那個括號裡面的 `(e)` 是什麼意思？」
