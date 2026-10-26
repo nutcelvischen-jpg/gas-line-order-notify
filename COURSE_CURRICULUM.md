@@ -344,6 +344,106 @@ AI 秒回：「您好！系辦公室位於三民校區中正大樓 7 樓 3705 �
 
 ---
 
+### 【單元 5（進階大師專題）】超越文字心算：Code Execution 與 Function Calling
+
+#### 🎯 單元目標：
+理解為什麼大語言模型「文字心算」容易出錯，並掌握現代 AI Agent 最頂級的兩種精準計算與外部連動架構：**Gemini 原生 Python 程式碼執行器 (Code Execution)** 與 **自訂函式呼叫 (Function Calling)**。
+
+---
+
+#### 🧠 核心觀念：AI 系統的三層演進階梯
+
+當客人問出複雜多條件問題（例如：*「我買 2 台鍵盤打 85 折，再折 100 元折價券，如果寄澎湖離島加多少運費？總共多少？」*），傳統聊天機器人通常會胡亂心算出一個錯誤數字（幻覺）。
+
+業界最強的現代 AI Agent 採用以下三層架構：
+
+```mermaid
+flowchart TD
+    subgraph L1 ["第一層：基礎開卷檢索 (Grounding)"]
+        L1_desc["Google 試算表 FAQ 知識庫<br>適用：查地址、營業時間、固定規章<br>優點：0 延遲、0 幻覺、免寫 code 維護"]
+    end
+
+    subgraph L2 ["第二層：原生代碼執行 (Code Execution)"]
+        L2_desc["Gemini 原生 Python 沙盒<br>適用：多步驟複合折扣、運費試算、單位換算<br>優點：Google 雲端全自動跑 Python，100% 數學精確，零伺服器成本"]
+    end
+
+    subgraph L3 ["第三層：企業級工具呼叫 (Function Calling)"]
+        L3_desc["自訂商業函式 (Tool Calling)<br>適用：驗證即時優惠券、查 ERP 庫存、下單結帳<br>優點：與真實 SQL 資料庫及結帳金流 API 深度對接"]
+    end
+
+    L1 --> L2 --> L3
+```
+
+---
+
+#### 🛠️ 實戰 1：開啟 Gemini 原生 Python 程式碼執行 (Code Execution)
+
+Gemini 官方內建了強大的 Python 沙盒。在呼叫 API 時，只需在 payload 加入 `tools: [{ codeExecution: {} }]`：
+
+```javascript
+// 在 Google Apps Script 中啟用 Code Execution
+const payload = {
+  contents: [{ role: "user", parts: [{ text: userQuestion }] }],
+  systemInstruction: { parts: [{ text: systemPrompt }] },
+  // 👇 關鍵：開啟 Google 官方雲端 Python 沙盒
+  tools: [
+    { codeExecution: {} }
+  ],
+  generationConfig: {
+    temperature: 0.2,
+    maxOutputTokens: 1500
+  }
+};
+```
+
+* **運作機制**：
+  1. Gemini 判斷這是一道算術題，它**不會自己猜數字**，而是在背後寫出一小段 Python 程式：
+     ```python
+     keyboard_price = 2480
+     subtotal = keyboard_price * 2 * 0.85
+     coupon = 100
+     shipping_penghu = 220
+     total = subtotal - coupon + shipping_penghu
+     print(f"小計: {subtotal}, 總額: {total}")
+     ```
+  2. Google 雲端沙盒瞬間執行該 Python，回傳 `小計: 4216.0, 總額: 4336.0`。
+  3. Gemini 依據精準執行結果回覆客人，**算術正確率 100%，徹底杜絕心算幻覺**！
+
+---
+
+#### 🛠️ 實戰 2：企業級自訂函式呼叫 (Function Calling)
+
+如果折扣公式涉及公司的保密演算法，或需要即時連線資料庫驗證 VIP 身分：
+
+1. **定義工具架構 (Tool Definition)**：
+   ```javascript
+   const tools = [{
+     functionDeclarations: [{
+       name: "calculateOrderQuote",
+       description: "精準計算商品折扣、折價券與各地區運費總額",
+       parameters: {
+         type: "OBJECT",
+         properties: {
+           item: { type: "STRING", description: "商品名稱" },
+           quantity: { type: "INTEGER", description: "購買數量" },
+           discountRate: { type: "NUMBER", description: "折扣折數，例如 0.85" },
+           couponDiscount: { type: "NUMBER", description: "折價券折抵金額" },
+           destination: { type: "STRING", description: "寄送目的地，例如 澎湖、本島" }
+         },
+         required: ["item", "quantity", "destination"]
+       }
+     }]
+   }];
+   ```
+2. **後端執行與回饋**：
+   - Gemini 分析客人的自然語言，自動抽取出 JSON 參數。
+   - 後端（GAS 或 Python）執行 `calculateOrderQuote()`，將精確結果回餵給 Gemini。
+   - Gemini 轉換為有溫度的客服回話，呈現給客人！
+
+---
+
+---
+
 ## ⚡ 零基礎小白實戰 7 大隱形避坑指南 (Crucial Gotchas)
 
 這 7 個坑是教學現場所累積出最常讓新手與講師卡關的細節，請學員務必詳讀：
