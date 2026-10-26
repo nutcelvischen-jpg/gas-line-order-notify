@@ -26,7 +26,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>✨ 幸福好物商店 - 線上訂單系統</title>
+  <title>🎓 國立臺中科技大學 國貿系 - 實習訂單系統</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -104,8 +104,8 @@ HTML_CONTENT = """<!DOCTYPE html>
 <body>
   <div class="order-card">
     <div class="header">
-      <h1>🛍️ 幸福好物商店</h1>
-      <p>下單後，訂單將即時推播至老闆手機 LINE！</p>
+      <h1>🎓 國立臺中科技大學 國貿系 實習商店</h1>
+      <p>下單後，訂單將即時推播至管理員手機 LINE！</p>
     </div>
     
     <div class="form-body">

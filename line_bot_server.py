@@ -106,11 +106,11 @@ def ask_gemini(user_query):
     """呼叫 Gemini 3.8 Flash 智慧解答"""
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={GEMINI_KEY}"
     system_prompt = (
-        "你是幸福好物旗艦店的官方 AI 智慧店長。\n"
+        "你是國立臺中科技大學國際貿易系（國貿系）的官方 AI 智慧助理「咒語兔」🐰。\n"
         "原則：\n"
         "1. 保持客氣、親切、熱情，一律使用繁體中文，字數精簡適中。\n"
-        "2. 官方政策：全館滿千免運，支援 7-11 超商與宅配取貨，商品享 7 天鑑賞期。\n"
-        "3. 若遇到超出範圍或機密問題，請委婉告知並引導客人點選下方「轉接真人」。"
+        "2. 官方資訊：系辦位於台中市北區三民路三段129號（三民校區中正大樓），服務時間為週一至週五 08:30 - 17:00，週六日及國定假日公休。\n"
+        "3. 若遇到超出範圍或機密問題，請委婉告知並引導點選下方「轉接真人」。"
     )
     payload = {
         "contents": [{"role": "user", "parts": [{"text": user_query}]}],
@@ -159,10 +159,10 @@ class LineWebhookHandler(http.server.SimpleHTTPRequestHandler):
                 # 事件 1：加好友 / 解除封鎖
                 if event_type == "follow":
                     welcome = (
-                        "🎉 歡迎加入「幸福好物官方旗艦店」！\n"
-                        "我是您的 24 小時 AI 智慧店長 ✨\n\n"
+                        "🎉 歡迎加入「國立臺中科技大學 國貿系」官方頻道！\n"
+                        "我是您的 AI 智慧助理「咒語兔」🐰✨\n\n"
                         "請問今天有什麼我可以協助您的嗎？\n"
-                        "您可以直接輸入問題，或點選下方快捷膠囊按鈕開始體驗！"
+                        "您可以直接輸入問題（詢問系所介紹、服務時間、地址或查訂單），或點選下方快捷膠囊按鈕開始體驗！"
                     )
                     reply_line_with_quick_reply(reply_token, welcome)
                     continue
@@ -172,14 +172,15 @@ class LineWebhookHandler(http.server.SimpleHTTPRequestHandler):
                     user_msg = event.get("message", {}).get("text", "").strip()
                     print(f"📩 收到來自客人 ({user_id[:6]}...) 的訊息: {user_msg}")
 
-                    # 1. 營業時間
-                    if user_msg in ["營業時間", "門市時間"]:
+                    # 1. 營業時間 / 服務時間
+                    if user_msg in ["營業時間", "門市時間", "服務時間"]:
                         hours_text = (
-                            "⏰【門市營業資訊】\n"
-                            "週一至週五：09:00 - 18:00\n"
-                            "週六至週日：10:00 - 17:00\n"
-                            "📍 地址：台北市信義區旗艦店\n"
-                            "國定假日公休，官網訂單照常出貨！"
+                            "⏰【國立臺中科技大學 國貿系 服務資訊】\n"
+                            "週一至週五：08:30 - 17:00 (中午 12:00-13:00 休息)\n"
+                            "週六、週日及國定假日公休\n"
+                            "📍 地址：台中市北區三民路三段129號 (三民校區中正大樓 國貿系辦)\n"
+                            "📞 電話：(04) 2219-6120\n"
+                            "線上諮詢與咒語兔 AI 24 小時為您服務！✨"
                         )
                         reply_line_with_quick_reply(reply_token, hours_text)
                         continue

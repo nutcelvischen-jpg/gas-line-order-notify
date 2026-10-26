@@ -49,10 +49,10 @@ function doPost(e) {
     // 事件 A：客人【剛加入好友】或【解除封鎖】
     // ----------------------------------------------------
     if (event.type === 'follow') {
-      const welcomeMsg = "🎉 歡迎加入「幸福好物官方旗艦店」！\n" +
-                         "我是您的 24 小時 AI 智慧店長 ✨\n\n" +
+      const welcomeMsg = "🎉 歡迎加入「國立臺中科技大學 國貿系」官方頻道！\n" +
+                         "我是您的 AI 智慧助理「咒語兔」🐰✨\n\n" +
                          "請問今天有什麼我可以協助您的嗎？\n" +
-                         "您可以直接輸入問題，或點選下方快捷按鈕開始體驗！";
+                         "您可以直接輸入問題（詢問系所介紹、服務時間、地址位置或查訂單），或點選下方快捷按鈕開始體驗！";
       replyWithQuickReply(replyToken, welcomeMsg);
       return ContentService.createTextOutput("OK");
     }
@@ -64,13 +64,14 @@ function doPost(e) {
       const userMsg = event.message.text.trim();
 
       // [軌道一：精準功能判斷]
-      // 1. 營業時間
-      if (userMsg === "營業時間" || userMsg === "門市時間") {
-        const text = "⏰【門市營業資訊】\n" +
-                     "週一至週五：09:00 - 18:00\n" +
-                     "週六至週日：10:00 - 17:00\n" +
-                     "📍 地址：台北市信義區旗艦店\n" +
-                     "國定假日公休，官網訂單正常照常出貨！";
+      // 1. 營業時間 / 服務時間 / 地址
+      if (userMsg === "營業時間" || userMsg === "門市時間" || userMsg === "服務時間") {
+        const text = "⏰【國立臺中科技大學 國貿系 服務資訊】\n" +
+                     "週一至週五：08:30 - 17:00 (中午 12:00-13:00 休息)\n" +
+                     "週六、週日及國定假日公休\n" +
+                     "📍 地址：台中市北區三民路三段129號 (三民校區中正大樓 國貿系辦)\n" +
+                     "📞 電話：(04) 2219-6120\n" +
+                     "線上諮詢與咒語兔 AI 24 小時為您服務！✨";
         replyWithQuickReply(replyToken, text);
         return ContentService.createTextOutput("OK");
       }
@@ -93,13 +94,13 @@ function doPost(e) {
       // 4. 呼叫真人客服
       if (userMsg === "找真人" || userMsg === "真人客服" || userMsg === "轉接真人") {
         // 回覆客人
-        const text = "🛎️ 已為您發送緊急推播給店長！店長稍後將親自於本對話框為您服務，請您稍候片刻！";
+        const text = "🛎️ 已為您發送緊急推播給系辦專人！助教/專人稍後將親自於本對話框為您服務，請您稍候片刻！";
         replyWithQuickReply(replyToken, text);
 
-        // 同時 Push 推播給老闆手機
-        const alertMsg = `🚨【店長緊急警報】有客人請求真人接手！\n` +
+        // 同時 Push 推播給負責人手機
+        const alertMsg = `🚨【真人客服緊急警報】有使用者請求真人接手！\n` +
                          `━━━━━━━━━━━━━━━\n` +
-                         `👤 客人 User ID：${userId}\n` +
+                         `👤 使用者 User ID：${userId}\n` +
                          `💬 最後一句話：${userMsg}\n` +
                          `⏰ 呼叫時間：${new Date().toLocaleTimeString()}\n` +
                          `━━━━━━━━━━━━━━━\n` +
@@ -234,10 +235,11 @@ function askGemini(userQuestion) {
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_KEY}`;
 
-    const systemPrompt = `你是一家專業品牌官方 AI 智慧客服店長。
+    const systemPrompt = `你是國立臺中科技大學國際貿易系（國貿系）的官方 AI 智慧助理「咒語兔」🐰。
 原則：
-1. 保持客氣、親切、熱情，一律使用「繁體中文」。
-2. 請優先參考以下官方知識庫回答；若知識庫未提及或超出範圍，請客氣建議客人點選下方「轉接真人」。
+1. 保持親切、專業、熱情，一律使用「繁體中文」。
+2. 介紹系所、服務時間、地址、課程活動或商品訂單時，請優先參考以下官方知識庫回答。
+3. 若知識庫未提及或超出範圍，請客氣告知並建議點選下方「轉接真人」由系辦助教/專人為您服務。
 【官方知識庫】：
 ${knowledge}`;
 
