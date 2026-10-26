@@ -91,7 +91,22 @@ function doPost(e) {
         return ContentService.createTextOutput("OK");
       }
 
-      // 4. 呼叫真人客服
+      // 4. 常見問題
+      if (userMsg === "常見問題" || userMsg.toLowerCase() === "faq") {
+        const text = "❓【國立臺中科技大學 國貿系・常見問題】\n" +
+                     "━━━━━━━━━━━━━━━\n" +
+                     "1️⃣ 服務時間：週一至週五 08:30 - 17:00 (12:00-13:00 休息)\n" +
+                     "2️⃣ 地址位置：台中市北區三民路三段129號 (三民校區中正大樓 國貿系辦)\n" +
+                     "3️⃣ 聯絡電話：(04) 2219-6120\n" +
+                     "4️⃣ 實習商品：降噪耳機($3200)、機械鍵盤($2480)、滑鼠($1350)\n" +
+                     "5️⃣ 運費政策：全館滿千免運，享 7 天鑑賞期\n" +
+                     "━━━━━━━━━━━━━━━\n" +
+                     "💡 您可以直接點選下方按鈕，或打字向 AI智慧客服 提問喔！";
+        replyWithQuickReply(replyToken, text);
+        return ContentService.createTextOutput("OK");
+      }
+
+      // 5. 呼叫真人客服
       if (userMsg === "找真人" || userMsg === "真人客服" || userMsg === "轉接真人") {
         // 回覆客人
         const text = "🛎️ 已為您發送緊急推播給系辦專人！助教/專人稍後將親自於本對話框為您服務，請您稍候片刻！";

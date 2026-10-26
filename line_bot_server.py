@@ -197,20 +197,36 @@ class LineWebhookHandler(http.server.SimpleHTTPRequestHandler):
                         reply_line_with_quick_reply(reply_token, result)
                         continue
 
-                    # 4. 找真人
+                    # 4. 常見問題
+                    if user_msg in ["常見問題", "faq", "FAQ"]:
+                        faq_text = (
+                            "❓【國立臺中科技大學 國貿系・常見問題】\n"
+                            "━━━━━━━━━━━━━━━\n"
+                            "1️⃣ 服務時間：週一至週五 08:30 - 17:00 (12:00-13:00 休息)\n"
+                            "2️⃣ 地址位置：台中市北區三民路三段129號 (三民校區中正大樓 國貿系辦)\n"
+                            "3️⃣ 聯絡電話：(04) 2219-6120\n"
+                            "4️⃣ 實習商品：降噪耳機($3200)、機械鍵盤($2480)、滑鼠($1350)\n"
+                            "5️⃣ 運費政策：全館滿千免運，享 7 天鑑賞期\n"
+                            "━━━━━━━━━━━━━━━\n"
+                            "💡 您可以直接點選下方按鈕，或打字向 AI智慧客服 提問喔！"
+                        )
+                        reply_line_with_quick_reply(reply_token, faq_text)
+                        continue
+
+                    # 5. 找真人
                     if user_msg in ["找真人", "真人客服", "轉接真人"]:
-                        reply_line_with_quick_reply(reply_token, "🛎️ 已為您發送緊急推播給店長！店長稍後將直接在此為您服務，請您稍候片刻！")
+                        reply_line_with_quick_reply(reply_token, "🛎️ 已為您發送緊急推播給系辦專人！專人稍後將直接在此為您服務，請您稍候片刻！")
                         push_to_boss(
-                            f"🚨【店長緊急警報】有客人請求真人客服！\n"
+                            f"🚨【真人客服緊急警報】有使用者請求真人客服！\n"
                             f"━━━━━━━━━━━━━━━\n"
-                            f"👤 客人 ID: {user_id}\n"
+                            f"👤 使用者 ID: {user_id}\n"
                             f"💬 最後一句話: {user_msg}\n"
                             f"⏰ 呼叫時間: {datetime.now().strftime('%H:%M:%S')}\n"
                             f"請儘速前往 LINE Official Manager 後台回覆！"
                         )
                         continue
 
-                    # 5. 其餘問題交給 Gemini 3.8 Flash
+                    # 6. 其餘問題交給 Gemini 3.8 Flash
                     print("🤖 呼叫 Gemini 3.8 Flash 解答...")
                     ai_reply = ask_gemini(user_msg)
                     reply_line_with_quick_reply(reply_token, ai_reply)
