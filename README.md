@@ -19,6 +19,8 @@
 
 ```text
 ├── SKILL.md                          # Antigravity 專屬 Skill 定義檔
+├── COURSE_CURRICULUM.md              # 📘 6 小時「零基礎小白 AI 實戰工作坊」超詳細教案手冊 (含 AI 提詞指令)
+├── LineBot_HybridChat.gs             # 完整雙軌智慧客服核心腳本（Quick Reply + 查試算表 + Gemini 3.8 + 真人推播）
 ├── GoogleSheet_LineOrderNotify.gs    # Google 試算表 ➔ LINE 推播核心腳本（18行）
 ├── app.py                            # 本機線上商店下單伺服器（Port 8888）
 ├── test_line_push.py                 # LINE Token 與 User ID 一鍵診斷測試工具

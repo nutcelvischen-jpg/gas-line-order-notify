@@ -102,8 +102,10 @@ function sendLinePush(toUserId, text) {
 
 ---
 
-## 🛠️ 輔助工具箱 (Scripts)
+## 🛠️ 輔助工具箱與教學文件 (Scripts & Course)
 
-本技能提供以下本機輔助工具：
+本技能提供以下完整教材與工具：
+* **`COURSE_CURRICULUM.md`**：專為零基礎學員設計的 6 小時超詳細教案（包含每一階段對 Gemini / Antigravity 的具體 Prompt 指令、避坑指南與 Capstone 評量）。
+* **`LineBot_HybridChat.gs`**：已實裝 Quick Reply 膠囊按鈕 + Google 試算表查單 + Gemini 3.8 Flash FAQ 知識庫 + 真人轉接的終極雙軌腳本。
 * **`scripts/test_line_push.py`**：1 秒測試驗證 Token 與 User ID 是否能正常送達手機。
 * **`scripts/app.py`**：免 Google 帳號的本機下單網頁伺服器（Port 8888），點擊按鈕直接觸發 LINE 推播並寫入本機 CSV。
