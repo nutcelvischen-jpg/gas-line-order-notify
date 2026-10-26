@@ -106,7 +106,7 @@ def ask_gemini(user_query):
     """呼叫 Gemini 3.8 Flash 智慧解答"""
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={GEMINI_KEY}"
     system_prompt = (
-        "你是國立臺中科技大學國際貿易系（國貿系）的官方 AI智慧客服「咒語兔」🐰。\n"
+        "你是國立臺中科技大學國際貿易系（國貿系）的官方 AI智慧客服。\n"
         "原則：\n"
         "1. 保持客氣、親切、熱情，一律使用繁體中文，字數精簡適中。\n"
         "2. 官方資訊：系辦位於台中市北區三民路三段129號（三民校區中正大樓），服務時間為週一至週五 08:30 - 17:00，週六日及國定假日公休。\n"
@@ -160,7 +160,7 @@ class LineWebhookHandler(http.server.SimpleHTTPRequestHandler):
                 if event_type == "follow":
                     welcome = (
                         "🎉 歡迎加入「國立臺中科技大學 國貿系」官方頻道！\n"
-                        "我是您的 AI智慧客服「咒語兔」🐰✨\n\n"
+                        "我是您的 AI智慧客服 ✨\n\n"
                         "請問今天有什麼我可以協助您的嗎？\n"
                         "您可以直接輸入問題（詢問系所介紹、服務時間、地址或查訂單），或點選下方快捷膠囊按鈕開始體驗！"
                     )
@@ -180,7 +180,7 @@ class LineWebhookHandler(http.server.SimpleHTTPRequestHandler):
                             "週六、週日及國定假日公休\n"
                             "📍 地址：台中市北區三民路三段129號 (三民校區中正大樓 國貿系辦)\n"
                             "📞 電話：(04) 2219-6120\n"
-                            "線上諮詢與咒語兔 AI智慧客服 24 小時為您服務！✨"
+                            "線上諮詢與 AI智慧客服 24 小時為您服務！✨"
                         )
                         reply_line_with_quick_reply(reply_token, hours_text)
                         continue
