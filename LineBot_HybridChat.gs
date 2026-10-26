@@ -50,7 +50,7 @@ function doPost(e) {
     // ----------------------------------------------------
     if (event.type === 'follow') {
       const welcomeMsg = "🎉 歡迎加入「國立臺中科技大學 國貿系」官方頻道！\n" +
-                         "我是您的 AI 智慧助理「咒語兔」🐰✨\n\n" +
+                         "我是您的 AI智慧客服「咒語兔」🐰✨\n\n" +
                          "請問今天有什麼我可以協助您的嗎？\n" +
                          "您可以直接輸入問題（詢問系所介紹、服務時間、地址位置或查訂單），或點選下方快捷按鈕開始體驗！";
       replyWithQuickReply(replyToken, welcomeMsg);
@@ -71,7 +71,7 @@ function doPost(e) {
                      "週六、週日及國定假日公休\n" +
                      "📍 地址：台中市北區三民路三段129號 (三民校區中正大樓 國貿系辦)\n" +
                      "📞 電話：(04) 2219-6120\n" +
-                     "線上諮詢與咒語兔 AI 24 小時為您服務！✨";
+                     "線上諮詢與咒語兔 AI智慧客服 24 小時為您服務！✨";
         replyWithQuickReply(replyToken, text);
         return ContentService.createTextOutput("OK");
       }
@@ -235,7 +235,7 @@ function askGemini(userQuestion) {
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_KEY}`;
 
-    const systemPrompt = `你是國立臺中科技大學國際貿易系（國貿系）的官方 AI 智慧助理「咒語兔」🐰。
+    const systemPrompt = `你是國立臺中科技大學國際貿易系（國貿系）的官方 AI智慧客服「咒語兔」🐰。
 原則：
 1. 保持親切、專業、熱情，一律使用「繁體中文」。
 2. 介紹系所、服務時間、地址、課程活動或商品訂單時，請優先參考以下官方知識庫回答。
