@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini 3.8 Flash 網頁聊天室</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --user-msg: #2563eb;
+      --bot-msg: #f1f5f9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 650px;
+      height: 92vh;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .chat-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .title-text h1 { font-size: 17px; font-weight: 700; }
+    .title-text span {
+      font-size: 12px;
+      color: #10b981;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+    }
+    .title-text span::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: #10b981;
+      border-radius: 50%;
+    }
+
+    .model-badge {
+      background: #eff6ff;
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid #dbeafe;
+    }
+
+    .messages-area {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      display: flex;
+      gap: 10px;
+      max-width: 85%;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+    }
+
+    .bubble {
+      padding: 13px 18px;
+      border-radius: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    .message.user .bubble {
+      background: var(--user-msg);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.bot .bubble {
+      background: var(--bot-msg);
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+    }
+
+    .thinking {
+      display: none;
+      align-self: flex-start;
+      background: var(--bot-msg);
+      padding: 12px 18px;
+      border-radius: 20px;
+      border-bottom-left-radius: 4px;
+      color: var(--text-muted);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      animation: pulse 1.4s infinite ease-in-out;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes pulse {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    .input-area {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 14px 20px;
+      border: 1.5px solid var(--border);
+      border-radius: 30px;
+      outline: none;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    button.send-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, transform 0.1s;
+      flex-shrink: 0;
+    }
+
+    button.send-btn:hover { background: var(--primary-hover); }
+    button.send-btn:active { transform: scale(0.95); }
+    button.send-btn:disabled { background: var(--border); cursor: not-allowed; }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <div class="header-title">
+        <div class="avatar">⚡</div>
+        <div class="title-text">
+          <h1>Gemini 助理</h1>
+          <span>API 連線正常</span>
+        </div>
+      </div>
+      <div class="model-badge">gemini-3.8-flash</div>
+    </div>
+
+    <div class="messages-area" id="messagesArea">
+      <div class="message bot">
+        <div class="bubble">您好！我是已串接完成的 Gemini 3.8 Flash 智慧助理。請問今天有什麼我可以協助您的嗎？</div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="請輸入任何問題..." autofocus onkeydown="if(event.key==='Enter') send()">
+      <button class="send-btn" id="sendBtn" onclick="send()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // 請填入您的 Gemini API Key
+    const API_KEY = "YOUR_GEMINI_API_KEY";
+    const MODEL = "gemini-3.8-flash";
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
+
+    let history = [];
+
+    async function send() {
+      const input = document.getElementById("userInput");
+      const btn = document.getElementById("sendBtn");
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendMessage(text, "user");
+      input.value = "";
+      input.disabled = true;
+      btn.disabled = true;
+
+      const thinkingDiv = showThinking();
+
+      try {
+        const contents = [
+          ...history,
+          { role: "user", parts: [{ text: text }] }
+        ];
+
+        const payload = {
+          contents: contents,
+          systemInstruction: {
+            parts: [{ text: "你是親切、智慧、專業的 AI 助理。請以繁體中文回答使用者的問題。" }]
+          },
+          generationConfig: {
+            temperature: 0.4,
+            maxOutputTokens: 1000
+          }
+        };
+
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        thinkingDiv.remove();
+
+        const data = await res.json();
+        if (res.ok && data.candidates && data.candidates[0].content.parts[0].text) {
+          const reply = data.candidates[0].content.parts[0].text;
+          appendMessage(reply, "bot");
+
+          // 保存最近 5 輪上下文歷史
+          history.push({ role: "user", parts: [{ text: text }] });
+          history.push({ role: "model", parts: [{ text: reply }] });
+          if (history.length > 10) history = history.slice(-10);
+        } else {
+          const errMsg = data.error ? data.error.message : "發生未知錯誤";
+          appendMessage(`⚠️ 系統錯誤：${errMsg}`, "bot");
+        }
+      } catch (err) {
+        thinkingDiv.remove();
+        appendMessage(`⚠️ 網路連線錯誤：${err.message}`, "bot");
+      } finally {
+        input.disabled = false;
+        btn.disabled = false;
+        input.focus();
+      }
+    }
+
+    function appendMessage(text, sender) {
+      const area = document.getElementById("messagesArea");
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `message ${sender}`;
+      
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerText = text;
+      
+      msgDiv.appendChild(bubble);
+      area.appendChild(msgDiv);
+      area.scrollTop = area.scrollHeight;
+    }
+
+    function showThinking() {
+      const area = document.getElementById("messagesArea");
+      const div = document.createElement("div");
+      div.className = "message bot";
+      div.innerHTML = `
+        <div class="thinking" style="display: flex;">
+          <span>思考中</span>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      `;
+      area.appendChild(div);
+      area.scrollTop = area.scrollHeight;
+      return div;
+    }
+  </script>
+</body>
+</html>
