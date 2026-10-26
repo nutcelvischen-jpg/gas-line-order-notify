@@ -17,6 +17,19 @@ const BOSS_USER_ID = SCRIPT_PROPS.getProperty('BOSS_USER_ID') || "YOUR_USER_ID";
 const GEMINI_KEY = SCRIPT_PROPS.getProperty('GEMINI_API_KEY') || "YOUR_GEMINI_API_KEY";
 
 /**
+ * 瀏覽器健康檢查進入點 (GET 請求)
+ * 解決初學者將 Web App 網址貼至瀏覽器時跳出「找不到 doGet」的常見困惑
+ */
+function doGet(e) {
+  return HtmlService.createHtmlOutput(
+    "<div style='font-family:sans-serif;text-align:center;padding:40px;'>" +
+    "<h2 style='color:#06c755;'>🟢 LINE Bot Webhook 伺服器運作中！</h2>" +
+    "<p style='color:#555;'>請在手機 LINE 官方帳號聊天室中傳送訊息測試。</p>" +
+    "</div>"
+  ).setTitle("LINE Bot Webhook 狀態");
+}
+
+/**
  * 2. Webhook 進入點：接收來自 LINE 的所有事件
  */
 function doPost(e) {
