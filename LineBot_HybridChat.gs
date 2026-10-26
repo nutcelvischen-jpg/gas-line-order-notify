@@ -198,7 +198,7 @@ function searchOrderInSheet(phoneKeyword) {
     const data = sheet.getDataRange().getValues();
 
     if (data.length <= 1) {
-      return `⚠️ 目前訂單資料庫中暫無記錄，請輸入「找真人」由店長為您查詢。`;
+      return `⚠️ 目前訂單資料庫中暫無記錄，請點選「轉接真人」由系辦專人為您查詢。`;
     }
 
     // 從第 2 列開始搜尋 (標題列略過)
@@ -222,9 +222,9 @@ function searchOrderInSheet(phoneKeyword) {
       }
     }
 
-    return `⚠️ 抱歉，系統找不到與「${phoneKeyword}」相符的訂單。\n請確認號碼是否正確，或點選下方「轉接真人」由專人協助！`;
+    return `⚠️ 抱歉，系統找不到與「${phoneKeyword}」相符的訂單。\n請確認號碼是否正確，或點選下方「轉接真人」由系辦專人協助！`;
   } catch (e) {
-    return `查詢時發生小問題，請直接點選「轉接真人」由店長協助您！`;
+    return `查詢時發生小問題，請直接點選「轉接真人」由專人協助您！`;
   }
 }
 

@@ -74,7 +74,7 @@ def push_to_boss(text):
 def search_order(keyword):
     """在 orders.csv 搜尋訂單"""
     if not os.path.exists("orders.csv"):
-        return "⚠️ 目前訂單資料庫中暫無記錄，請點選「找真人」由店長為您查詢。"
+        return "⚠️ 目前訂單資料庫中暫無記錄，請點選「找真人」由系辦專人為您查詢。"
     
     clean_kw = "".join(filter(str.isdigit, keyword)) if any(c.isdigit() for c in keyword) else keyword.strip()
     
