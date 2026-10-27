@@ -587,12 +587,20 @@ window.EPISODE = {
     m.to("#scene-s03", { opacity: 0, y: -40, duration: 0.5, ease: "power2.in" }, S(3).start - 0.4);
 
     // -------------------------------------------------------------
-    // SCENE 4: Form Walkthrough (s04: 35.02s ~ 45.79s)
+    // SCENE 4: Form Walkthrough (s04)
     // -------------------------------------------------------------
     m.fromTo("#scene-s04", { opacity: 0 }, { opacity: 1, duration: 0.6 }, S(3).start);
     c.rise("#s04-left", S(3).start + 0.1, 0.9, 30);
     c.tilt("#s04-mockup", S(3).start + 0.3, 1.2);
     c.rise(".form-step-item", S(3).start + 0.5, 0.8, 25);
+
+    // Smooth scroll down the form to clearly show the Google Doc URL, Optional Live Demo & YouTube Link
+    m.fromTo("#s04-mockup img", { y: 0 }, { y: -220, duration: 4.2, ease: "power2.inOut" }, L(3, 1) - 0.2);
+    m.fromTo(".form-step-item:nth-child(3)", 
+      { borderColor: "rgba(255, 255, 255, 0.08)" }, 
+      { borderColor: "rgba(52, 211, 153, 0.6)", backgroundColor: "rgba(52, 211, 153, 0.12)", duration: 0.8, ease: "power2.out" }, 
+      L(3, 1)
+    );
 
     // Transition out Scene 4
     m.to("#scene-s04", { opacity: 0, y: -40, duration: 0.5, ease: "power2.in" }, S(4).start - 0.4);
