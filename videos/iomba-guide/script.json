@@ -1,0 +1,68 @@
+{
+  "format": "wide",
+  "size": [1920, 1080],
+  "langs": ["en"],
+  "voice": { "en": "Aoede" },
+  "style": {
+    "en": "Speak in a clear, articulate, warm, and professional International English accent, like a helpful university instructor walking students through their midterm assignment submission portal. Pacing is natural, encouraging, and confident."
+  },
+  "meta": {
+    "common": { "brand": "IOMBA" },
+    "en": {
+      "event": "IOMBA · MIDTERM ASSIGNMENT SUBMISSION GUIDE",
+      "hl": [
+        "IOMBA",
+        "Midterm",
+        "Google Doc",
+        "Anyone with the link can view",
+        "Live Demo URL",
+        "YouTube",
+        "Student ID",
+        "Bonus Points",
+        "Submit Assignment"
+      ]
+    }
+  },
+  "scenes": [
+    {
+      "id": "s01",
+      "dir": { "en": "Warm and welcoming introduction." },
+      "en": [
+        "Welcome to the IOMBA Midterm Assignment Submission Portal.",
+        "In this quick guide, we will walk you through how to submit your midterm project smoothly."
+      ]
+    },
+    {
+      "id": "s02",
+      "dir": { "en": "Clear and structured, explaining the deliverables." },
+      "en": [
+        "Your midterm deliverable is submitted via a single Google Doc link.",
+        "Inside your document, include your project description, paste your live project link, and add a YouTube link if you recorded a video."
+      ]
+    },
+    {
+      "id": "s03",
+      "dir": { "en": "Emphasise the critical permission step with seriousness and clarity." },
+      "en": [
+        "Here is the most critical step: ensure your Google Doc sharing permission is set to 'Anyone with the link can view'.",
+        "If your document remains private, evaluators cannot access or grade your work."
+      ]
+    },
+    {
+      "id": "s04",
+      "dir": { "en": "Demonstrative, guiding through the form fields." },
+      "en": [
+        "On the portal, enter your Student ID, name, project title, and your Google Doc link.",
+        "Pasting your live link and YouTube link on the form is optional, but helps us grade faster!"
+      ]
+    },
+    {
+      "id": "s05",
+      "dir": { "en": "Encouraging and reassuring finish." },
+      "en": [
+        "You will immediately receive a submission timestamp.",
+        "Need to revise? Resubmitting with the same Student ID updates your previous submission automatically. Best of luck on your midterm report!"
+      ]
+    }
+  ]
+}

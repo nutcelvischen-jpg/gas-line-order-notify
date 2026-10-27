@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IOMBA Assignment Submission Guide</title>
+  <link rel="stylesheet" href="_runtime/runtime.css">
+  <style>
+    /* IOMBA Navy & Cyan Color Scheme */
+    :root {
+      --bg1: #0f172a;
+      --bg2: #090d16;
+      --bg3: #020617;
+      --cream: #f8fafc;
+      --gold: #38bdf8;       /* Electric cyan accent */
+      --champ: #93c5fd;      /* Soft sky blue */
+      --amber: #fbbf24;      /* Warning amber */
+      --emerald: #34d399;    /* Success emerald */
+      --rose: #f43f5e;
+      --line: rgba(56, 189, 248, 0.22);
+      --glow-rgb: 56, 189, 248;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: var(--cream);
+    }
+
+    /* Scene containers */
+    .scene-wrap {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Common Card Styles */
+    .glass-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--gold);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Browser Mockup */
+    .browser-frame {
+      border-radius: 20px;
+      overflow: hidden;
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
+    }
+    .browser-bar {
+      height: 44px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .browser-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .b-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .b-red { background: #ef4444; }
+    .b-yellow { background: #f59e0b; }
+    .b-green { background: #10b981; }
+    .browser-url {
+      margin-left: 12px;
+      flex: 1;
+      max-width: 600px;
+      height: 28px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    /* Scene 1: Welcome */
+    #s01-hero {
+      left: 100px;
+      top: 240px;
+      width: 800px;
+    }
+    #s01-hero h1 {
+      font-size: 84px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-top: 18px;
+      letter-spacing: -0.02em;
+    }
+    #s01-hero h1 span {
+      color: var(--gold);
+    }
+    #s01-hero p {
+      font-size: 30px;
+      color: var(--champ);
+      margin-top: 20px;
+      line-height: 1.4;
+    }
+    #s01-mockup {
+      left: 960px;
+      top: 190px;
+      width: 860px;
+      height: 600px;
+    }
+
+    /* Scene 2: 3 Deliverable Pillars */
+    #s02-head {
+      left: 0;
+      width: 1920px;
+      top: 170px;
+      text-align: center;
+    }
+    #s02-head h2 {
+      font-size: 64px;
+      font-weight: 800;
+    }
+    #s02-head p {
+      font-size: 26px;
+      color: var(--champ);
+      margin-top: 8px;
+    }
+    #s02-pillars {
+      left: 140px;
+      top: 310px;
+      width: 1640px;
+      display: flex;
+      gap: 36px;
+    }
+    .pillar-card {
+      flex: 1;
+      padding: 38px 32px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+    .pillar-num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 20px;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+    .pillar-title {
+      font-size: 34px;
+      font-weight: 800;
+      margin-top: 12px;
+      color: #fff;
+    }
+    .pillar-desc {
+      font-size: 21px;
+      color: #94a3b8;
+      margin-top: 14px;
+      line-height: 1.45;
+    }
+    .pillar-tag {
+      display: inline-block;
+      margin-top: 24px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tag-blue { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+    .tag-green { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+    .tag-amber { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+
+    /* Scene 3: Permission Alert */
+    #s03-wrap {
+      left: 120px;
+      top: 170px;
+      width: 1680px;
+    }
+    #s03-alert-box {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(180, 83, 9, 0.05) 100%);
+      border: 2px solid rgba(245, 158, 11, 0.6);
+      border-radius: 28px;
+      padding: 44px 50px;
+      box-shadow: 0 0 80px rgba(245, 158, 11, 0.2);
+    }
+    .step-flow {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 36px;
+    }
+    .step-node {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 22px 20px;
+      border-radius: 18px;
+      text-align: center;
+    }
+    .step-node-num {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fbbf24;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .step-node-text {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 6px;
+      color: #fff;
+    }
+    .step-arrow {
+      font-size: 28px;
+      color: #fbbf24;
+      font-weight: bold;
+    }
+
+    /* Scene 4: Form Walkthrough */
+    #s04-left {
+      left: 120px;
+      top: 200px;
+      width: 680px;
+    }
+    #s04-mockup {
+      left: 840px;
+      top: 170px;
+      width: 960px;
+      height: 640px;
+    }
+    .form-step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 24px;
+      padding: 18px 22px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .step-icon-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    /* Scene 5: Confirmation & Wrap up */
+    #s05-wrap {
+      left: 0;
+      width: 1920px;
+      top: 190px;
+      text-align: center;
+    }
+    .check-circle {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: rgba(52, 211, 153, 0.2);
+      border: 3px solid #34d399;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 58px;
+      margin: 0 auto 24px;
+      box-shadow: 0 0 60px rgba(52, 211, 153, 0.35);
+    }
+    #s05-policy-card {
+      max-width: 1200px;
+      margin: 36px auto 0;
+      padding: 32px 48px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+<div id="stage">
+
+  <!-- =====================================================================
+       SCENE 1: Welcome & Overview (s01)
+       ===================================================================== -->
+  <div id="scene-s01" class="scene-wrap">
+    <div id="s01-hero" class="abs">
+      <div class="badge-pill">
+        <i></i> IOMBA Program &bull; Midterm Assignment
+      </div>
+      <h1>Midterm Project<br><span>Submission Walkthrough</span></h1>
+      <p>Everything you need to know to submit your midterm assignment smoothly and on time.</p>
+    </div>
+
+    <div id="s01-mockup" class="abs browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <div class="b-dot b-red"></div>
+          <div class="b-dot b-yellow"></div>
+          <div class="b-dot b-green"></div>
+        </div>
+        <div class="browser-url">script.google.com/macros/s/iomba-midterm/exec</div>
+      </div>
+      <div style="height: 556px; overflow: hidden; background: #f8fafc;">
+        <img src="assets/01_portal_overview.png" style="width: 100%; display: block;" alt="Portal Overview">
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       SCENE 2: Google Doc Deliverables (s02)
+       ===================================================================== -->
+  <div id="scene-s02" class="scene-wrap">
+    <div id="s02-head" class="abs">
+      <div class="badge-pill">Midterm Deliverables Checklist</div>
+      <h2 style="margin-top: 14px;">What To Include In Your Google Doc</h2>
+      <p>Your midterm report is submitted through a single, well-structured Google Doc.</p>
+    </div>
+
+    <div id="s02-pillars" class="abs">
+      <!-- Pillar 1 -->
+      <div class="pillar-card">
+        <div class="pillar-num">01 / DOCUMENTATION</div>
+        <div class="pillar-title">Project Description</div>
+        <div class="pillar-desc">
+          Explain your project concept, problem solved, tools taught in class used, and add screenshots.
+        </div>
+        <div class="pillar-tag tag-blue">Required</div>
+      </div>
+
+      <!-- Pillar 2 -->
+      <div class="pillar-card">
+        <div class="pillar-num">02 / LIVE DEMO</div>
+        <div class="pillar-title">Paste Project Link</div>
+        <div class="pillar-desc">
+          Paste the direct clickable link to your live work: GitHub Pages, Netlify, Apps Script, or Dashboard.
+        </div>
+        <div class="pillar-tag tag-green">Required in Doc</div>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="pillar-card">
+        <div class="pillar-num">03 / YOUTUBE DEMO</div>
+        <div class="pillar-title">YouTube Link</div>
+        <div class="pillar-desc">
+          If recorded, paste a public or unlisted YouTube video walkthrough link to earn bonus points.
+        </div>
+        <div class="pillar-tag tag-amber">🌟 Bonus Points</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       SCENE 3: Critical Sharing Permission Alert (s03)
+       ===================================================================== -->
+  <div id="scene-s03" class="scene-wrap">
+    <div id="s03-wrap" class="abs">
+      <div id="s03-alert-box">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 18px;">
+            <div style="width: 64px; height: 64px; border-radius: 18px; background: rgba(245, 158, 11, 0.25); display: flex; align-items: center; justify-content: center; font-size: 34px;">
+              ⚠️
+            </div>
+            <div>
+              <div style="font-size: 16px; font-weight: 800; color: #fbbf24; letter-spacing: 0.12em; text-transform: uppercase;">
+                Critical Requirement
+              </div>
+              <h2 style="font-size: 46px; font-weight: 800; color: #fff; margin-top: 4px;">
+                Google Doc Sharing Permission
+              </h2>
+            </div>
+          </div>
+          <div style="padding: 10px 24px; border-radius: 999px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; font-size: 18px; font-weight: 700;">
+            🚫 Private Docs Cannot Be Graded
+          </div>
+        </div>
+
+        <p style="font-size: 26px; color: #fde68a; margin-top: 24px; line-height: 1.5;">
+          You <strong>MUST</strong> set the General Access to <span style="background: rgba(245, 158, 11, 0.3); padding: 2px 10px; border-radius: 6px; font-weight: 800; color: #fff;">"Anyone with the link can view"</span> before submitting.
+        </p>
+
+        <!-- 4-step flowchart -->
+        <div class="step-flow">
+          <div class="step-node">
+            <div class="step-node-num">Step 1</div>
+            <div class="step-node-text">Open Google Doc</div>
+          </div>
+          <div class="step-arrow">&rarr;</div>
+          <div class="step-node">
+            <div class="step-node-num">Step 2</div>
+            <div class="step-node-text">Click "Share"</div>
+          </div>
+          <div class="step-arrow">&rarr;</div>
+          <div class="step-node" style="border-color: #fbbf24; background: rgba(245, 158, 11, 0.15);">
+            <div class="step-node-num" style="color: #fff;">Step 3 (General Access)</div>
+            <div class="step-node-text" style="color: #fbbf24;">Anyone with link</div>
+          </div>
+          <div class="step-arrow">&rarr;</div>
+          <div class="step-node">
+            <div class="step-node-num">Step 4</div>
+            <div class="step-node-text">Role: "Viewer"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       SCENE 4: Form Walkthrough (s04)
+       ===================================================================== -->
+  <div id="scene-s04" class="scene-wrap">
+    <div id="s04-left" class="abs">
+      <div class="badge-pill">Step-by-Step Portal</div>
+      <h2 style="font-size: 52px; font-weight: 800; margin-top: 14px; line-height: 1.15;">
+        Submitting on<br><span style="color: var(--gold);">The Web Form</span>
+      </h2>
+
+      <div style="margin-top: 32px;">
+        <div class="form-step-item">
+          <div class="step-icon-badge">1</div>
+          <div>
+            <div style="font-size: 22px; font-weight: 700; color: #fff;">Student ID & Full Name</div>
+            <div style="font-size: 17px; color: #94a3b8; margin-top: 2px;">Enter your official university Student ID and name.</div>
+          </div>
+        </div>
+
+        <div class="form-step-item">
+          <div class="step-icon-badge">2</div>
+          <div>
+            <div style="font-size: 22px; font-weight: 700; color: #fff;">Midterm Google Doc URL</div>
+            <div style="font-size: 17px; color: #94a3b8; margin-top: 2px;">Primary report containing your write-up, screenshots & links.</div>
+          </div>
+        </div>
+
+        <div class="form-step-item">
+          <div class="step-icon-badge">3</div>
+          <div>
+            <div style="font-size: 22px; font-weight: 700; color: #fff;">Direct Links (Fast Grading)</div>
+            <div style="font-size: 17px; color: #94a3b8; margin-top: 2px;">Pasting live demo & YouTube link on form allows instant testing.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="s04-mockup" class="abs browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dots">
+          <div class="b-dot b-red"></div>
+          <div class="b-dot b-yellow"></div>
+          <div class="b-dot b-green"></div>
+        </div>
+        <div class="browser-url">script.google.com/macros/s/iomba/exec</div>
+      </div>
+      <div style="height: 596px; overflow: hidden; background: #f8fafc;">
+        <img src="assets/04_form_filled.png" style="width: 100%; display: block;" alt="Filled Form">
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       SCENE 5: Confirmation & Revision Policy (s05)
+       ===================================================================== -->
+  <div id="scene-s05" class="scene-wrap">
+    <div id="s05-wrap" class="abs">
+      <div class="check-circle">&check;</div>
+      <h2 style="font-size: 64px; font-weight: 800; color: #fff;">
+        Instant Submission Confirmation
+      </h2>
+      <p style="font-size: 26px; color: var(--champ); margin-top: 10px;">
+        Your submission timestamp and project details are recorded directly into Google Sheets.
+      </p>
+
+      <div id="s05-policy-card">
+        <div style="font-size: 46px; flex-shrink: 0;">💡</div>
+        <div>
+          <div style="font-size: 24px; font-weight: 800; color: var(--gold); text-transform: uppercase; letter-spacing: 0.05em;">
+            Resubmission & Revision Policy
+          </div>
+          <div style="font-size: 21px; color: #cbd5e1; margin-top: 6px; line-height: 1.45;">
+            Need to fix a link or revise your work before the deadline? 
+            Simply <strong>submit again with the same Student ID</strong> &mdash; the portal automatically updates your previous entry without creating duplicates!
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 48px; font-size: 28px; font-weight: 700; color: #fff; letter-spacing: 0.05em;">
+        Best of luck on your midterm report! &bull; <span style="color: var(--gold);">IOMBA Program</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="_runtime/gsap.min.js"></script>
+<script src="_tl.js"></script>
+<script src="_runtime/core.js"></script>
+<script>
+window.EPISODE = {
+  strings: {
+    en: {}
+  },
+  build(c) {
+    const { m, S, L, LE, LM } = c;
+    const E = "expo.out", IO = "expo.inOut";
+
+    // -------------------------------------------------------------
+    // SCENE 1: Welcome & Overview (s01: 0.4s ~ 8.85s)
+    // -------------------------------------------------------------
+    m.fromTo("#scene-s01", { opacity: 0 }, { opacity: 1, duration: 0.6 }, S(0).start);
+    c.rise("#s01-hero", S(0).start + 0.1, 1.0, 40);
+    c.tilt("#s01-mockup", S(0).start + 0.4, 1.2);
+    m.to("#s01-mockup", { y: -20, duration: 3.5, ease: "sine.inOut", yoyo: true, repeat: -1 }, S(0).start + 1.6);
+
+    // Transition out Scene 1
+    m.to("#scene-s01", { opacity: 0, y: -40, duration: 0.5, ease: "power2.in" }, S(1).start - 0.4);
+
+    // -------------------------------------------------------------
+    // SCENE 2: Google Doc Deliverables (s02: 9.2s ~ 21.75s)
+    // -------------------------------------------------------------
+    m.fromTo("#scene-s02", { opacity: 0 }, { opacity: 1, duration: 0.6 }, S(1).start);
+    c.rise("#s02-head", S(1).start + 0.1, 0.9, 30);
+    c.rise(".pillar-card", S(1).start + 0.4, 1.1, 50);
+
+    // Staggered highlights on cards
+    m.fromTo(".pillar-card:nth-child(1)", { scale: 0.95 }, { scale: 1.03, duration: 0.6, ease: E }, L(1, 0) + 1.0);
+    m.to(".pillar-card:nth-child(1)", { scale: 1.0, duration: 0.5, ease: E }, L(1, 0) + 2.5);
+
+    m.fromTo(".pillar-card:nth-child(2)", { scale: 0.95 }, { scale: 1.03, duration: 0.6, ease: E }, L(1, 1) + 1.0);
+    m.to(".pillar-card:nth-child(2)", { scale: 1.0, duration: 0.5, ease: E }, L(1, 1) + 3.0);
+
+    m.fromTo(".pillar-card:nth-child(3)", { scale: 0.95 }, { scale: 1.03, duration: 0.6, ease: E }, L(1, 1) + 4.5);
+    m.to(".pillar-card:nth-child(3)", { scale: 1.0, duration: 0.5, ease: E }, L(1, 1) + 6.5);
+
+    // Transition out Scene 2
+    m.to("#scene-s02", { opacity: 0, y: -40, duration: 0.5, ease: "power2.in" }, S(2).start - 0.4);
+
+    // -------------------------------------------------------------
+    // SCENE 3: Permission Alert (s03: 22.1s ~ 34.67s)
+    // -------------------------------------------------------------
+    m.fromTo("#scene-s03", { opacity: 0 }, { opacity: 1, duration: 0.6 }, S(2).start);
+    c.rise("#s03-alert-box", S(2).start + 0.1, 1.0, 40);
+
+    // Step-by-step sequential node reveal
+    c.rise(".step-node", S(2).start + 0.6, 0.8, 30);
+    m.fromTo(".step-node:nth-child(5)", { scale: 0.9 }, { scale: 1.08, duration: 0.6, ease: "back.out(2)" }, L(2, 0) + 3.0);
+
+    // Transition out Scene 3
+    m.to("#scene-s03", { opacity: 0, y: -40, duration: 0.5, ease: "power2.in" }, S(3).start - 0.4);
+
+    // -------------------------------------------------------------
+    // SCENE 4: Form Walkthrough (s04: 35.02s ~ 45.79s)
+    // -------------------------------------------------------------
+    m.fromTo("#scene-s04", { opacity: 0 }, { opacity: 1, duration: 0.6 }, S(3).start);
+    c.rise("#s04-left", S(3).start + 0.1, 0.9, 30);
+    c.tilt("#s04-mockup", S(3).start + 0.3, 1.2);
+    c.rise(".form-step-item", S(3).start + 0.5, 0.8, 25);
+
+    // Transition out Scene 4
+    m.to("#scene-s04", { opacity: 0, y: -40, duration: 0.5, ease: "power2.in" }, S(4).start - 0.4);
+
+    // -------------------------------------------------------------
+    // SCENE 5: Confirmation & Wrap Up (s05: 46.14s ~ 58.7s)
+    // -------------------------------------------------------------
+    m.fromTo("#scene-s05", { opacity: 0 }, { opacity: 1, duration: 0.6 }, S(4).start);
+    c.rise(".check-circle", S(4).start + 0.1, 0.9, 40);
+    m.fromTo(".check-circle", { scale: 0 }, { scale: 1, duration: 0.8, ease: "back.out(1.8)" }, S(4).start + 0.2);
+    c.rise("#s05-wrap h2", S(4).start + 0.4, 0.8, 20);
+    c.rise("#s05-wrap p", S(4).start + 0.6, 0.8, 20);
+    c.rise("#s05-policy-card", S(4).start + 0.9, 1.0, 30);
+  }
+};
+</script>
+<script src="_runtime/runtime.js"></script>
+</body>
+</html>
